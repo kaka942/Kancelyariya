@@ -12,6 +12,7 @@ publish/
 backups/*.db
 
 ## OS generated files
+push_to_github.bat
 Thumbs.db
 [Ee]hthumbs.db
 Desktop.ini

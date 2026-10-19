@@ -1,0 +1,91 @@
+<Window x:Class="Kancelyariya.Views.ProductDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Товар" Width="420" SizeToContent="Height"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        FontFamily="Segoe UI" FontSize="13" 
+        Background="{DynamicResource WindowBackgroundBrush}">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,4,12,4"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+        </Style>
+        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="Margin" Value="0,4,0,4"/>
+        </Style>
+        <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+            <Setter Property="Margin" Value="0,4,0,4"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Padding" Value="16,0"/>
+            <Setter Property="Margin" Value="8,0,0,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Название -->
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Название:"/>
+        <TextBox Grid.Row="0" Grid.Column="1" x:Name="TxtName"/>
+
+        <!-- Категория -->
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Категория:"/>
+        <ComboBox Grid.Row="1" Grid.Column="1" x:Name="CmbCategory" IsEditable="True"/>
+
+        <!-- Единица измерения -->
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Единица измерения:"/>
+        <ComboBox Grid.Row="2" Grid.Column="1" x:Name="CmbUnit" IsEditable="True"/>
+
+        <!-- Минимальный остаток -->
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Минимальный остаток:"/>
+        <TextBox Grid.Row="3" Grid.Column="1" x:Name="TxtMinQty" Text="0"/>
+
+        <!-- Начальное количество -->
+        <TextBlock Grid.Row="4" Grid.Column="0" x:Name="LblInitialQty" Text="Начальное количество:"/>
+        <TextBox Grid.Row="4" Grid.Column="1" x:Name="TxtInitialQty" Text="0"/>
+
+        <!-- Сообщение об ошибке -->
+        <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" x:Name="TxtError" 
+                   Foreground="#E53E3E" FontWeight="SemiBold" TextWrapping="Wrap" Margin="0,8,0,4" Visibility="Collapsed"/>
+
+        <!-- Кнопки -->
+        <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,14,0,0">
+            <Button Content="Сохранить" IsDefault="True" Click="OnSaveClick" 
+                    Background="{DynamicResource PrimaryButtonBackgroundBrush}" 
+                    Foreground="{DynamicResource PrimaryButtonForegroundBrush}" 
+                    BorderBrush="{DynamicResource PrimaryButtonBorderBrush}"/>
+            <Button Content="Отмена" IsCancel="True" Click="OnCancelClick"
+                    Background="{DynamicResource ActionButtonBackgroundBrush}" 
+                    Foreground="{DynamicResource ActionButtonForegroundBrush}" 
+                    BorderBrush="{DynamicResource ActionButtonBorderBrush}"/>
+        </StackPanel>
+    </Grid>
+</Window>

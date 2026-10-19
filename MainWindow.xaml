@@ -1,0 +1,726 @@
+<Window x:Class="Kancelyariya.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Kancelyariya"
+        mc:Ignorable="d"
+        Title="Учет канцелярии" Height="740" Width="1100" MinHeight="520" MinWidth="840"
+        WindowStartupLocation="CenterScreen"
+        FontFamily="Segoe UI" FontSize="13" 
+        Background="{DynamicResource WindowBackgroundBrush}">
+
+    <Window.Resources>
+        <!-- Общие стили кнопок -->
+        <Style x:Key="ActionButton" TargetType="Button">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Padding" Value="14,0"/>
+            <Setter Property="Margin" Value="0,0,6,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ActionButtonBorderBrush}"/>
+            <Setter Property="Background" Value="{DynamicResource ActionButtonBackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ActionButtonForegroundBrush}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource ActionButtonHoverBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Основная акцентная кнопка -->
+        <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
+            <Setter Property="Background" Value="{DynamicResource PrimaryButtonBackgroundBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource PrimaryButtonBorderBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryButtonForegroundBrush}"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource PrimaryButtonHoverBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Поля ввода и комбобоксы -->
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="{DynamicResource InputBackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource InputBorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CaretBrush" Value="{DynamicResource TextPrimaryBrush}"/>
+        </Style>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Background" Value="{DynamicResource InputBackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource InputBorderBrush}"/>
+        </Style>
+
+        <Style TargetType="CheckBox">
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <!-- Стиль для DataGrid -->
+        <Style TargetType="DataGrid">
+            <Setter Property="Background" Value="{DynamicResource CardBackgroundBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="RowHeight" Value="28"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource DataGridGridLinesBrush}"/>
+            <Setter Property="VerticalGridLinesBrush" Value="Transparent"/>
+            <Setter Property="AlternatingRowBackground" Value="{DynamicResource DataGridRowAlternateBrush}"/>
+            <Setter Property="RowBackground" Value="{DynamicResource CardBackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="CanUserDeleteRows" Value="False"/>
+            <Setter Property="CanUserResizeRows" Value="False"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="SelectionUnit" Value="FullRow"/>
+            <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True"/>
+            <Setter Property="VirtualizingPanel.VirtualizationMode" Value="Recycling"/>
+            <Setter Property="VirtualizingPanel.ScrollUnit" Value="Pixel"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
+            <Setter Property="EnableRowVirtualization" Value="True"/>
+            <Setter Property="EnableColumnVirtualization" Value="True"/>
+        </Style>
+
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Background" Value="{DynamicResource DataGridHeaderBackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource DataGridHeaderForegroundBrush}"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="8,0"/>
+            <Setter Property="BorderThickness" Value="0,0,1,1"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+        </Style>
+
+        <!-- Подсветка заканчивающихся товаров в DataGrid -->
+        <Style x:Key="ProductRowStyle" TargetType="DataGridRow">
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsLow}" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource LowStockBackgroundBrush}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource LowStockForegroundBrush}"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                </DataTrigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource DataGridRowSelectedBrush}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource DataGridRowSelectedTextBrush}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="StandardRowStyle" TargetType="DataGridRow">
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource DataGridRowSelectedBrush}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource DataGridRowSelectedTextBrush}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- ========================================== -->
+        <!--  СТИЛИ ДЛЯ СОВРЕМЕННОГО FLOATING TOOLBAR  -->
+        <!-- ========================================== -->
+
+        <!-- Стиль переключателей в капсуле навигации -->
+        <Style x:Key="NavTabItemStyle" TargetType="RadioButton">
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+            <Setter Property="Height" Value="52"/>
+            <Setter Property="MinWidth" Value="90"/>
+            <Setter Property="GroupName" Value="NavTabsGroup"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="PillBorder"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="26"
+                                Padding="12,5"
+                                Margin="2,0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="True"/>
+                                    <Condition Property="IsChecked" Value="False"/>
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="PillBorder" Property="Background" Value="{DynamicResource ActionButtonHoverBrush}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+                            </MultiTrigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="PillBorder" Property="Background" Value="{DynamicResource PrimaryButtonBackgroundBrush}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource PrimaryButtonForegroundBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Стиль круглых кнопок плавающего тулбара -->
+        <Style x:Key="NavCircleButtonStyle" TargetType="Button">
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Width" Value="58"/>
+            <Setter Property="Height" Value="58"/>
+            <Setter Property="Background" Value="{DynamicResource CardBackgroundBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="CircleBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="29">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="20" ShadowDepth="4" Direction="270" Color="#000000" Opacity="0.4"/>
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="CircleBorder" Property="Background" Value="{DynamicResource ActionButtonHoverBrush}"/>
+                                <Setter TargetName="CircleBorder" Property="BorderBrush" Value="{DynamicResource PrimaryButtonBackgroundBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="CircleBorder" Property="Background" Value="{DynamicResource SurfaceBackgroundBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Меню быстрых действий -->
+        <Style x:Key="DarkContextMenuStyle" TargetType="ContextMenu">
+            <Setter Property="Background" Value="{DynamicResource CardBackgroundBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="4"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <!-- Верхняя строка: Меню и переключатель темы -->
+            <RowDefinition Height="Auto"/>
+            <!-- Основная область: Контент вкладок -->
+            <RowDefinition Height="*"/>
+            <!-- Нижняя строка: Плавающий тулбар и статус -->
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 1. ВЕРХНЯЯ ПАНЕЛЬ -->
+        <Border Grid.Row="0" Background="{DynamicResource HeaderBackgroundBrush}" 
+                BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1">
+            <DockPanel Margin="6,2,10,2">
+                <!-- Главное меню -->
+                <Menu DockPanel.Dock="Left" Background="Transparent" VerticalAlignment="Center">
+                    <MenuItem Header="Файл" Padding="10,6" Foreground="{DynamicResource TextPrimaryBrush}">
+                        <MenuItem Header="Создать резервную копию" Click="OnMenuManualBackupClick"/>
+                        <MenuItem Header="Восстановить из копии…" Click="OnMenuRestoreClick"/>
+                        <Separator/>
+                        <MenuItem Header="🏆 Офисный детектив и статистика" Click="OnOpenFunStatsClick"/>
+                        <MenuItem Header="📜 Объяснительная за степлер" Click="OnOpenFunStatsClick"/>
+                        <Separator/>
+                        <MenuItem Header="Заполнить демо-данными" Click="OnMenuSeedDemoClick"/>
+                        <Separator/>
+                        <MenuItem Header="Открыть папку с базой данных" Click="OnMenuOpenDataFolderClick"/>
+                        <MenuItem Header="Открыть папку с копиями" Click="OnMenuOpenBackupsFolderClick"/>
+                        <Separator/>
+                        <MenuItem Header="Выход" Click="OnMenuExitClick"/>
+                    </MenuItem>
+                </Menu>
+
+                <!-- Офисная мудрость завхоза (интерактивный прикол) -->
+                <Button x:Name="BtnOfficeWisdom" Style="{StaticResource ActionButton}" 
+                        Margin="12,0,0,0" ToolTip="Кликните для новой офисной мудрости 🎲" 
+                        Click="OnOfficeWisdomClick" VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="💡" Margin="0,0,6,0" FontSize="13"/>
+                        <TextBlock x:Name="TxtOfficeWisdom" Text="Завхоз: Синяя ручка — расходник, ножницы — священный артефакт!" 
+                                   FontSize="12" Foreground="{DynamicResource TextPrimaryBrush}" 
+                                   MaxWidth="380" TextTrimming="CharacterEllipsis"/>
+                        <TextBlock Text=" 🎲" Margin="6,0,0,0" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                    </StackPanel>
+                </Button>
+
+                <!-- Правая часть: статус -->
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <!-- Бейдж состояния склада -->
+                    <Border Background="{DynamicResource BadgeBackgroundBrush}" 
+                            BorderBrush="{DynamicResource BadgeBorderBrush}" 
+                            BorderThickness="1" CornerRadius="12" Padding="10,4">
+                        <TextBlock x:Name="TxtHeaderBadge" Text="Склад активен" 
+                                   Foreground="{DynamicResource BadgeForegroundBrush}" 
+                                   FontSize="11" FontWeight="SemiBold"/>
+                    </Border>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- 2. ОСНОВНОЙ КОНТЕНТ (ВКЛАДКИ С БЕСШОВНЫМ ПЕРЕКЛЮЧЕНИЕМ) -->
+        <TabControl Grid.Row="1" x:Name="MainTabs" Margin="10,8,10,6" Background="Transparent" BorderThickness="0"
+                    SelectionChanged="OnMainTabsSelectionChanged">
+            <TabControl.Template>
+                <ControlTemplate TargetType="TabControl">
+                    <ContentPresenter ContentSource="SelectedContent"/>
+                </ControlTemplate>
+            </TabControl.Template>
+
+            <!-- Вкладка 0: Товары -->
+            <TabItem Header="Товары">
+                <Border Background="{DynamicResource CardBackgroundBrush}" CornerRadius="8" 
+                        BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Панель кнопок и поиска -->
+                        <DockPanel Grid.Row="0" Margin="12,12,12,6">
+                            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                                <Button Content="+ Добавить товар" Style="{StaticResource PrimaryButton}" Click="OnAddProductClick"/>
+                                <Button Content="Приход" Style="{StaticResource ActionButton}" Click="OnOpInClick"/>
+                                <Button Content="Выдать" Style="{StaticResource ActionButton}" Click="OnOpOutClick"/>
+                                <Button Content="Списать" Style="{StaticResource ActionButton}" Click="OnOpWriteoffClick"/>
+                                <Button Content="Изменить" Style="{StaticResource ActionButton}" Click="OnEditProductClick"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
+                                <CheckBox x:Name="ChkLowOnly" Content="только заканчивающиеся" VerticalAlignment="Center" 
+                                          Margin="0,0,14,0" Checked="OnProductFilterChanged" Unchecked="OnProductFilterChanged"/>
+                                <TextBlock Text="Поиск:" VerticalAlignment="Center" Margin="0,0,6,0" 
+                                           Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBox x:Name="TxtProductSearch" Width="180" Height="28" VerticalContentAlignment="Center" 
+                                         Padding="4,0" TextChanged="OnProductSearchChanged"/>
+                            </StackPanel>
+                        </DockPanel>
+
+                        <!-- Строка с итогами -->
+                        <TextBlock Grid.Row="1" x:Name="TxtProductsSummary" Text="Позиций: 0.  Требуют заказа: 0" 
+                                   Margin="14,0,12,8" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="12"/>
+
+                        <!-- Таблица товаров -->
+                        <DataGrid Grid.Row="2" x:Name="GridProducts" Margin="12,0,12,12" 
+                                  RowStyle="{StaticResource ProductRowStyle}"
+                                  MouseDoubleClick="OnGridProductsDoubleClick">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="240"/>
+                                <DataGridTextColumn Header="Категория" Binding="{Binding Category}" Width="160"/>
+                                
+                                <DataGridTextColumn Header="Ед." Binding="{Binding Unit}" Width="65">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Остаток" Binding="{Binding Qty}" Width="90">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="Margin" Value="0,0,8,0"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Мин." Binding="{Binding MinQty}" Width="80">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="Margin" Value="0,0,8,0"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Статус" Binding="{Binding StatusText}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Border>
+            </TabItem>
+
+            <!-- Вкладка 1: Журнал операций -->
+            <TabItem Header="Журнал">
+                <Border Background="{DynamicResource CardBackgroundBrush}" CornerRadius="8" 
+                        BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Фильтры журнала и экспорт -->
+                        <DockPanel Grid.Row="0" Margin="12">
+                            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                                <ComboBox x:Name="CmbJournalType" Width="140" Height="28" VerticalContentAlignment="Center"
+                                          SelectionChanged="OnJournalFilterChanged"/>
+                                <ComboBox x:Name="CmbJournalRecipient" Width="220" Height="28" Margin="8,0,0,0" VerticalContentAlignment="Center"
+                                          SelectionChanged="OnJournalFilterChanged"/>
+                                <TextBlock Text="Поиск:" VerticalAlignment="Center" Margin="12,0,6,0" 
+                                           Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBox x:Name="TxtJournalSearch" Width="180" Height="28" VerticalContentAlignment="Center" 
+                                         Padding="4,0" TextChanged="OnJournalSearchChanged"/>
+                            </StackPanel>
+
+                            <Button Content="Экспорт в CSV" Style="{StaticResource ActionButton}" DockPanel.Dock="Right" 
+                                    HorizontalAlignment="Right" Click="OnExportCsvClick"/>
+                        </DockPanel>
+
+                        <!-- Таблица журнала -->
+                        <DataGrid Grid.Row="1" x:Name="GridJournal" Margin="12,0,12,12"
+                                  RowStyle="{StaticResource StandardRowStyle}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Дата" Binding="{Binding FormattedDate}" Width="130"/>
+                                <DataGridTextColumn Header="Товар" Binding="{Binding ProductName}" Width="200"/>
+                                <DataGridTextColumn Header="Операция" Binding="{Binding TypeName}" Width="100"/>
+
+                                <DataGridTemplateColumn Header="Кол-во" Width="110">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding DisplayQty}" 
+                                                       Foreground="{Binding ColorHex}" 
+                                                       FontWeight="SemiBold" 
+                                                       HorizontalAlignment="Right" 
+                                                       VerticalAlignment="Center" 
+                                                       Margin="0,0,8,0"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTextColumn Header="Получатель" Binding="{Binding DisplayRecipient}" Width="220"/>
+                                <DataGridTextColumn Header="Примечание" Binding="{Binding DisplayNote}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Border>
+            </TabItem>
+
+            <!-- Вкладка 2: Сотрудники -->
+            <TabItem Header="Сотрудники">
+                <Border Background="{DynamicResource CardBackgroundBrush}" CornerRadius="8" 
+                        BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Кнопки сотрудников -->
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="12">
+                            <Button Content="+ Добавить сотрудника" Style="{StaticResource PrimaryButton}" Click="OnAddEmployeeClick"/>
+                            <Button Content="Изменить" Style="{StaticResource ActionButton}" Click="OnEditEmployeeClick"/>
+                            <Button Content="Удалить" Style="{StaticResource ActionButton}" Click="OnDeleteEmployeeClick"/>
+                        </StackPanel>
+
+                        <!-- Таблица сотрудников -->
+                        <DataGrid Grid.Row="1" x:Name="GridEmployees" Margin="12,0,12,12"
+                                  RowStyle="{StaticResource StandardRowStyle}"
+                                  MouseDoubleClick="OnGridEmployeesDoubleClick">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="ФИО" Binding="{Binding Name}" Width="320"/>
+                                <DataGridTextColumn Header="Подразделение" Binding="{Binding Dept}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Border>
+            </TabItem>
+
+            <!-- Вкладка 3: Дефицит / Заказ -->
+            <TabItem Header="Дефицит">
+                <Border Background="{DynamicResource CardBackgroundBrush}" CornerRadius="8" 
+                        BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Верхняя панель действий -->
+                        <DockPanel Grid.Row="0" Margin="12,12,12,6">
+                            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                                <Button Content="+ Оформить приход" Style="{StaticResource PrimaryButton}" Click="OnDeficitOpInClick"/>
+                                <Button Content="Экспорт ведомости заказа в CSV" Style="{StaticResource ActionButton}" Click="OnExportOrderCsvClick"/>
+                            </StackPanel>
+                        </DockPanel>
+
+                        <!-- Строка с итогами -->
+                        <TextBlock Grid.Row="1" x:Name="TxtDeficitSummary" Text="Критический остаток: 0 позиций" 
+                                   Margin="14,0,12,8" Foreground="{DynamicResource LowStockForegroundBrush}" 
+                                   FontWeight="SemiBold" FontSize="12"/>
+
+                        <!-- Таблица дефицита -->
+                        <DataGrid Grid.Row="2" x:Name="GridDeficit" Margin="12,0,12,12"
+                                  RowStyle="{StaticResource StandardRowStyle}"
+                                  MouseDoubleClick="OnGridDeficitDoubleClick">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="240"/>
+                                <DataGridTextColumn Header="Категория" Binding="{Binding Category}" Width="160"/>
+                                
+                                <DataGridTextColumn Header="Ед." Binding="{Binding Unit}" Width="65">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Текущий остаток" Binding="{Binding Qty}" Width="120">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="Foreground" Value="#E53E3E"/>
+                                            <Setter Property="FontWeight" Value="Bold"/>
+                                            <Setter Property="Margin" Value="0,0,8,0"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Мин. норма" Binding="{Binding MinQty}" Width="95">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="Margin" Value="0,0,8,0"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Нехватка" Binding="{Binding DeficitQty}" Width="90">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="Foreground" Value="#DD6B20"/>
+                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                            <Setter Property="Margin" Value="0,0,8,0"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Реком. заказ" Binding="{Binding RecommendedOrderQty}" Width="105">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="Foreground" Value="{DynamicResource PrimaryButtonBackgroundBrush}"/>
+                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                            <Setter Property="Margin" Value="0,0,8,0"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Статус" Binding="{Binding StatusText}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Border>
+            </TabItem>
+        </TabControl>
+
+        <!-- 3. НИЖНЯЯ ПАНЕЛЬ С АДАПТИВНЫМ TOOLBAR И СТРОКОЙ СОСТОЯНИЯ -->
+        <Grid Grid.Row="2" Background="{DynamicResource BottomDockContainerBrush}" Margin="0,4,0,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- ПЛАВАЮЩИЙ АДАПТИВНЫЙ TOOLBAR (В СТИЛЕ СКРИНШОТА) -->
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <!-- Капсульный контейнер тулбара -->
+                <Border Background="{DynamicResource CardBackgroundBrush}" 
+                        BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" 
+                        CornerRadius="31" Height="62" Padding="6,4">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="22" ShadowDepth="4" Direction="270" Color="#000000" Opacity="0.45"/>
+                    </Border.Effect>
+
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <!-- Кнопка 1: Товары -->
+                        <RadioButton x:Name="RbNavProducts" Style="{StaticResource NavTabItemStyle}" 
+                                     IsChecked="True" Click="OnNavProductsClick">
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Path Width="18" Height="18" Stretch="Uniform" Margin="0,0,0,3"
+                                      Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"
+                                      Data="M19 4H18V2H16V4H8V2H6V4H5C3.89 4 3 4.9 3 6V20C3 21.1 3.89 22 5 22H19C20.1 22 21 21.1 21 20V6C21 4.9 20.1 4 19 4ZM19 20H5V9H19V20ZM7 11H9V13H7V11ZM11 11H13V13H11V11ZM15 11H17V13H15V11ZM7 15H9V17H7V15ZM11 15H13V17H11V15ZM15 15H17V17H15V15Z"/>
+                                <TextBlock Text="Товары" FontSize="11" FontWeight="SemiBold" TextAlignment="Center"
+                                           Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
+                            </StackPanel>
+                        </RadioButton>
+
+                        <!-- Кнопка 2: Журнал -->
+                        <RadioButton x:Name="RbNavJournal" Style="{StaticResource NavTabItemStyle}" 
+                                     Click="OnNavJournalClick">
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Path Width="18" Height="18" Stretch="Uniform" Margin="0,0,0,3"
+                                      Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"
+                                      Data="M20 18C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2H4C2.9 2 2 2.9 2 4V16C2 17.1 2.9 18 4 18H0V20H24V18H20ZM4 4H20V16H4V4Z"/>
+                                <TextBlock Text="Журнал" FontSize="11" FontWeight="SemiBold" TextAlignment="Center"
+                                           Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
+                            </StackPanel>
+                        </RadioButton>
+
+                        <!-- Кнопка 3: Сотрудники -->
+                        <RadioButton x:Name="RbNavEmployees" Style="{StaticResource NavTabItemStyle}" 
+                                     Click="OnNavEmployeesClick">
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Path Width="18" Height="18" Stretch="Uniform" Margin="0,0,0,3"
+                                      Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"
+                                      Data="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z"/>
+                                <TextBlock Text="Сотрудники" FontSize="11" FontWeight="SemiBold" TextAlignment="Center"
+                                           Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
+                            </StackPanel>
+                        </RadioButton>
+
+                        <!-- Кнопка 4: Дефицит (с бейджем) -->
+                        <RadioButton x:Name="RbNavDeficit" Style="{StaticResource NavTabItemStyle}" 
+                                     Click="OnNavDeficitClick">
+                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                                    <Path Width="18" Height="18" Stretch="Uniform" Margin="0,0,0,3"
+                                          Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"
+                                          Data="M1 21H23L12 2L1 21ZM13 18H11V16H13V18ZM13 14H11V10H13V14Z"/>
+                                    <TextBlock Text="Дефицит" FontSize="11" FontWeight="SemiBold" TextAlignment="Center"
+                                               Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
+                                </StackPanel>
+
+                                <!-- Красный бейдж при наличии нехватки -->
+                                <Border x:Name="BadgeDeficit" Background="#E53E3E" CornerRadius="7" 
+                                        Padding="4,0" Margin="22,-4,-10,0" VerticalAlignment="Top" HorizontalAlignment="Right"
+                                        Visibility="Collapsed">
+                                    <TextBlock x:Name="TxtDeficitBadge" Text="0" Foreground="White" FontSize="9" FontWeight="Bold"/>
+                                </Border>
+                            </Grid>
+                        </RadioButton>
+                    </StackPanel>
+                </Border>
+
+                <!-- Круглая кнопка быстрых действий -->
+                <Button x:Name="BtnNavActions" Style="{StaticResource NavCircleButtonStyle}" 
+                        Margin="12,0,0,0" ToolTip="Быстрые действия и фильтры" Click="OnQuickActionsClick">
+                    <Button.ContextMenu>
+                        <ContextMenu Style="{StaticResource DarkContextMenuStyle}">
+                            <MenuItem Header="➕  Приход канцелярии" Click="OnOpInClick"/>
+                            <MenuItem Header="📤  Выдать сотруднику" Click="OnOpOutClick"/>
+                            <MenuItem Header="🗑️  Списать товар" Click="OnOpWriteoffClick"/>
+                            <Separator Background="{DynamicResource BorderBrush}"/>
+                            <MenuItem Header="⚠️  Перейти к дефициту" Click="OnNavDeficitClick"/>
+                            <MenuItem Header="⚡  Фильтр: только заканчивающиеся" Click="OnToggleLowFilterClick"/>
+                            <MenuItem Header="📊  Экспорт журнала в CSV" Click="OnExportCsvClick"/>
+                            <Separator Background="{DynamicResource BorderBrush}"/>
+                            <MenuItem Header="🏆  Офисный детектив и статистика" Click="OnOpenFunStatsClick"/>
+                            <MenuItem Header="📜  Объяснительная за степлер" Click="OnOpenFunStatsClick"/>
+                            <Separator Background="{DynamicResource BorderBrush}"/>
+                            <MenuItem Header="💾  Создать резервную копию" Click="OnMenuManualBackupClick"/>
+                            <MenuItem Header="📂  Открыть папку базы данных" Click="OnMenuOpenDataFolderClick"/>
+                            <MenuItem Header="✨  Заполнить демо-данными" Click="OnMenuSeedDemoClick"/>
+                        </ContextMenu>
+                    </Button.ContextMenu>
+
+                    <!-- Иконка эквалайзера / фильтров (в сине-акцентных тонах) -->
+                    <Canvas Width="24" Height="24">
+                        <Line X1="3" Y1="6" X2="7" Y2="6" Stroke="{DynamicResource PrimaryButtonBackgroundBrush}" StrokeThickness="1.8" StrokeStartLineCap="Round"/>
+                        <Line X1="13" Y1="6" X2="21" Y2="6" Stroke="{DynamicResource PrimaryButtonBackgroundBrush}" StrokeThickness="1.8" StrokeEndLineCap="Round"/>
+                        <Ellipse Canvas.Left="7" Canvas.Top="3.5" Width="5" Height="5" Stroke="{DynamicResource PrimaryButtonBackgroundBrush}" StrokeThickness="1.8" Fill="{DynamicResource CardBackgroundBrush}"/>
+
+                        <Line X1="3" Y1="12" X2="13" Y2="12" Stroke="{DynamicResource PrimaryButtonBackgroundBrush}" StrokeThickness="1.8" StrokeStartLineCap="Round"/>
+                        <Line X1="19" Y1="12" X2="21" Y2="12" Stroke="{DynamicResource PrimaryButtonBackgroundBrush}" StrokeThickness="1.8" StrokeEndLineCap="Round"/>
+                        <Ellipse Canvas.Left="13" Canvas.Top="9.5" Width="5" Height="5" Stroke="{DynamicResource PrimaryButtonBackgroundBrush}" StrokeThickness="1.8" Fill="{DynamicResource CardBackgroundBrush}"/>
+
+                        <Line X1="3" Y1="18" X2="8" Y2="18" Stroke="{DynamicResource PrimaryButtonBackgroundBrush}" StrokeThickness="1.8" StrokeStartLineCap="Round"/>
+                        <Line X1="14" Y1="18" X2="21" Y2="18" Stroke="{DynamicResource PrimaryButtonBackgroundBrush}" StrokeThickness="1.8" StrokeEndLineCap="Round"/>
+                        <Ellipse Canvas.Left="8" Canvas.Top="15.5" Width="5" Height="5" Stroke="{DynamicResource PrimaryButtonBackgroundBrush}" StrokeThickness="1.8" Fill="{DynamicResource CardBackgroundBrush}"/>
+                    </Canvas>
+                </Button>
+            </StackPanel>
+
+            <!-- Тонкая строка состояния под тулбаром -->
+            <TextBlock Grid.Row="1" x:Name="TxtStatusDbPath" Text="База данных:" 
+                       Foreground="{DynamicResource BottomStatusBrush}" FontSize="11" 
+                       HorizontalAlignment="Center" Margin="0,6,0,0"/>
+        </Grid>
+    </Grid>
+</Window>

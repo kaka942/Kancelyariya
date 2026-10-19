@@ -1,0 +1,19 @@
+## Visual Studio / .NET build artifacts
+[Bb]in/
+[Oo]bj/
+publish/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Backup database files
+backups/*.db
+
+## OS generated files
+Thumbs.db
+[Ee]hthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
